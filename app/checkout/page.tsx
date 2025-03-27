@@ -1,39 +1,33 @@
 'use client';
 
 import { useState } from 'react';
+import { FormData, FormSchema, checkoutSchema } from '@/utils/validations/form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import FormField from '@/components/formField';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function Checkout() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    documentType: 'cpf',
-    documentNumber: '',
-    city: '',
-    street: '',
-    number: '',
-    neighborhood: '',
-    state: '',
-    country: '',
-    cardNumber: '',
-    cardHolder: '',
-    cvv: '',
-    expirationDate: '',
-    installments: 1,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormData>({
+    resolver: zodResolver(checkoutSchema), // integração com o zod
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const formData = watch();
+  const documentType = watch('documentType'); // Pega o tipo selecionado pelo usuário
 
-  // Verifica se a etapa está completa para liberar o próximo passo
   const isStepComplete = (currentStep: number) => {
     switch (currentStep) {
       case 1:
         return (
-          formData.firstName && formData.lastName && formData.documentNumber
+          formData.firstName &&
+          formData.lastName &&
+          formData.documentType &&
+          formData.documentNumber
         );
       case 2:
         return formData.city && formData.street && formData.number;
@@ -51,13 +45,13 @@ export default function Checkout() {
 
   // Avança para a próxima etapa
   const handleNext = () => {
-    if (isStepComplete(step)) {
-      setStep(step + 1);
-    }
+    setStep(step + 1);
   };
 
   // Envia os dados para a API mock
-  const handleSubmit = async () => {
+  const onSubmitForm: SubmitHandler<FormSchema> = async (
+    formData: FormData
+  ) => {
     const response = await fetch('/api/transactions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -86,7 +80,7 @@ export default function Checkout() {
             holderName: formData.cardHolder,
             cvv: formData.cvv,
             expirationDate: formData.expirationDate,
-            installments: formData.installments,
+            // installments: formData.installments,
           },
         },
       }),
@@ -102,214 +96,234 @@ export default function Checkout() {
 
       <div className='grid grid-cols-3 pt-3'>
         <div className='col-span-2 pr-3'>
-          {/* Identificação */}
-          <div className={`py-3 ${step === 1 ? 'opacity-100' : 'opacity-40'}`}>
-            <button className='font-semibold' onClick={() => setStep(1)}>
-              Identificação
-            </button>
-            {step === 1 && (
-              <div className='mt-2 space-y-2'>
-                <div className='flex gap-3'>
-                  <input
-                    type='text'
-                    name='firstName'
-                    placeholder='Nome'
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className='border p-2 w-full'
-                  />
-                  <input
-                    type='text'
-                    name='lastName'
-                    placeholder='Sobrenome'
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className='border p-2 w-full'
-                  />
-                </div>
+          <form onSubmit={handleSubmit(onSubmitForm)}>
+            {/* Identificação */}
+            <div
+              className={`py-3 ${step === 1 ? 'opacity-100' : 'opacity-40'}`}
+            >
+              <button className='font-semibold' onClick={() => setStep(1)}>
+                Identificação
+              </button>
+              {step === 1 && (
+                <div className='mt-2 space-y-2'>
+                  <div className='flex'>
+                    <FormField
+                      type='text'
+                      placeholder='Nome'
+                      name='firstName'
+                      register={register}
+                      error={errors.firstName}
+                    />
 
-                <div>
-                  <label className='block font-medium'>Documento:</label>
-                  <div className='flex items-center gap-4 mt-1'>
-                    <label className='flex items-center'>
-                      <input
-                        type='radio'
-                        name='documentType'
-                        value='cpf'
-                        checked={formData.documentType === 'cpf'}
-                        onChange={handleChange}
-                        className='mr-1'
-                      />
-                      CPF
-                    </label>
-                    <label className='flex items-center'>
-                      <input
-                        type='radio'
-                        name='documentType'
-                        value='cnpj'
-                        checked={formData.documentType === 'cnpj'}
-                        onChange={handleChange}
-                        className='mr-1'
-                      />
-                      CNPJ
-                    </label>
+                    <FormField
+                      type='text'
+                      placeholder='Sobrenome'
+                      name='lastName'
+                      register={register}
+                      error={errors.lastName}
+                    />
                   </div>
-                  <input
-                    type='text'
-                    name='documentNumber'
-                    value={formData.documentNumber}
-                    onChange={handleChange}
-                    placeholder='Número do documento'
-                    className='border p-2 w-full rounded mt-2 '
-                  />
-                </div>
 
-                <div className='flex justify-end mt-5 mb-2'>
+                  <div>
+                    <label htmlFor='documentType' className='block font-medium'>
+                      Documento:
+                    </label>
+                    <div className='flex items-center gap-4 mt-1'>
+                      <label className='flex items-center'>
+                        <input
+                          type='radio'
+                          value='cpf'
+                          {...register('documentType')}
+                          className='mr-1'
+                        />
+                        CPF
+                      </label>
+                      <label className='flex items-center'>
+                        <input
+                          type='radio'
+                          value='cnpj'
+                          {...register('documentType')}
+                          className='mr-1'
+                        />
+                        CNPJ
+                      </label>
+                    </div>
+
+                    <FormField
+                      type='text'
+                      placeholder={documentType === 'cnpj' ? 'CNPJ' : 'CPF'}
+                      name='documentNumber'
+                      register={register}
+                      error={errors.documentNumber}
+                      mask={documentType === 'cnpj' ? 'cnpj' : 'cpf'}
+                    />
+                  </div>
+
+                  <div className='flex justify-end mt-5 mb-2'>
+                    <button
+                      onClick={handleNext}
+                      disabled={!isStepComplete(1)}
+                      className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
+                    >
+                      Salvar e Continuar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <hr className='opacity-40' />
+
+            {/* Endereço */}
+            <div
+              className={`py-3 ${step === 2 ? 'opacity-100' : 'opacity-40'}`}
+            >
+              <button className='font-semibold' onClick={() => setStep(2)}>
+                Endereço
+              </button>
+              {step === 2 && (
+                <div className='mt-2 space-y-2'>
+                  <FormField
+                    type='text'
+                    placeholder='Rua'
+                    name='street'
+                    register={register}
+                    error={errors.street}
+                  />
+
+                  <FormField
+                    type='text'
+                    placeholder='Número'
+                    name='number'
+                    register={register}
+                    error={errors.number}
+                  />
+
+                  <FormField
+                    type='text'
+                    placeholder='Bairro'
+                    name='neighborhood'
+                    register={register}
+                    error={errors.neighborhood}
+                  />
+
+                  <FormField
+                    type='text'
+                    placeholder='Cidade'
+                    name='city'
+                    register={register}
+                    error={errors.city}
+                  />
+
+                  <FormField
+                    type='text'
+                    placeholder='País'
+                    name='country'
+                    register={register}
+                    error={errors.country}
+                  />
+
+                  <FormField
+                    type='text'
+                    placeholder='Estado'
+                    name='state'
+                    register={register}
+                    error={errors.state}
+                  />
+
                   <button
                     onClick={handleNext}
-                    disabled={!isStepComplete(1)}
+                    disabled={!isStepComplete(2)}
                     className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
                   >
                     Salvar e Continuar
                   </button>
                 </div>
-              </div>
-            )}
-          </div>
-          <hr className='opacity-40' />
+              )}
+            </div>
 
-          {/* Endereço */}
-          <div className={`py-3 ${step === 2 ? 'opacity-100' : 'opacity-40'}`}>
-            <button className='font-semibold' onClick={() => setStep(2)}>
-              Endereço
-            </button>
-            {step === 2 && (
-              <div className='mt-2 space-y-2'>
-                <input
-                  type='text'
-                  name='street'
-                  placeholder='Rua'
-                  value={formData.street}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='number'
-                  placeholder='Número'
-                  value={formData.number}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='neighborhood'
-                  placeholder='Bairro'
-                  value={formData.neighborhood}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='city'
-                  placeholder='Cidade'
-                  value={formData.city}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='state'
-                  placeholder='Estado'
-                  value={formData.state}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <button
-                  onClick={handleNext}
-                  disabled={!isStepComplete(2)}
-                  className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
-                >
-                  Salvar e Continuar
-                </button>
-              </div>
-            )}
-          </div>
+            <hr className='opacity-40' />
 
-          <hr className='opacity-40' />
+            {/* Pagamentos */}
+            <div
+              className={`py-3 ${step === 3 ? 'opacity-100' : 'opacity-40'}`}
+            >
+              <button className='font-semibold' onClick={() => setStep(3)}>
+                Pagamentos
+              </button>
+              {step === 3 && (
+                <div className='mt-2 space-y-2'>
+                  <FormField
+                    type='text'
+                    placeholder='Número do cartão'
+                    name='cardNumber'
+                    register={register}
+                    mask='creditCard'
+                    error={errors.cardNumber}
+                  />
 
-          {/* Pagamentos */}
-          <div className={`py-3 ${step === 3 ? 'opacity-100' : 'opacity-40'}`}>
-            <button className='font-semibold' onClick={() => setStep(3)}>
-              Pagamentos
-            </button>
-            {step === 3 && (
-              <div className='mt-2 space-y-2'>
-                <input
-                  type='text'
-                  name='cardNumber'
-                  placeholder='Número do Cartão'
-                  value={formData.cardNumber}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='cardHolder'
-                  placeholder='Nome no Cartão'
-                  value={formData.cardHolder}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='cvv'
-                  placeholder='CVV'
-                  value={formData.cvv}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <input
-                  type='text'
-                  name='expirationDate'
-                  placeholder='MM/YYYY'
-                  value={formData.expirationDate}
-                  onChange={handleChange}
-                  className='border p-2 w-full'
-                />
-                <button
-                  onClick={handleNext}
-                  disabled={!isStepComplete(3)}
-                  className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
-                >
-                  Salvar e Continuar
-                </button>
-              </div>
-            )}
-          </div>
+                  <FormField
+                    type='text'
+                    placeholder='Nome do Cartão'
+                    name='cardHolder'
+                    register={register}
+                    error={errors.cardHolder}
+                  />
 
-          <hr className='opacity-40' />
+                  <FormField
+                    type='text'
+                    placeholder='CVV'
+                    name='cvv'
+                    register={register}
+                    error={errors.cvv}
+                  />
 
-          {/* Revisão do pedido */}
-          <div className={`py-3 ${step === 2 ? 'opacity-100' : 'opacity-40'}`}>
-            <button className='font-semibold' onClick={() => setStep(4)}>
-              Revisão do pedido
-            </button>
-            {step === 4 && (
-              <div className='mt-4'>
-                <h2 className='text-lg font-semibold'>Revisão de Pedido</h2>
-                <pre className='bg-gray-100 p-2 rounded'>
-                  {JSON.stringify(formData, null, 2)}
-                </pre>
-                <button
-                  onClick={handleSubmit}
-                  className='bg-green-500 text-white p-2 mt-2 rounded'
-                >
-                  Confirmar Pedido
-                </button>
-              </div>
-            )}
-          </div>
+                  <FormField
+                    type='text'
+                    placeholder='MM/YYYY'
+                    name='expirationDate'
+                    register={register}
+                    mask='expirationDate'
+                    error={errors.expirationDate}
+                  />
+
+                  {/* Falta um select para o intallments */}
+
+                  <button
+                    onClick={handleNext}
+                    disabled={!isStepComplete(3)}
+                    className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
+                  >
+                    Salvar e Continuar
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <hr className='opacity-40' />
+
+            {/* Revisão do pedido */}
+            <div
+              className={`py-3 ${step === 4 ? 'opacity-100' : 'opacity-40'}`}
+            >
+              <button className='font-semibold' onClick={() => setStep(4)}>
+                Revisão do pedido
+              </button>
+              {step === 4 && (
+                <div className='mt-4'>
+                  <h2 className='text-lg font-semibold'>Revisão de Pedido</h2>
+                  <pre className='bg-gray-100 p-2 rounded'>
+                    {JSON.stringify(watch(), null, 2)}
+                  </pre>
+                  <button
+                    type='submit'
+                    className='bg-green-500 text-white p-2 mt-2 rounded'
+                  >
+                    Confirmar Pedido
+                  </button>
+                </div>
+              )}
+            </div>
+          </form>
         </div>
 
         <div>
