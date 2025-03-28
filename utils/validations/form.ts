@@ -1,6 +1,6 @@
-import { FieldError, UseFormRegister } from 'react-hook-form';
 import { z, ZodType } from 'zod';
 import { isValidCreditCard } from './creditCardValidation';
+import { FieldError, UseFormRegister } from 'react-hook-form';
 
 export const checkoutSchema: ZodType<FormData> = z
   .object({
@@ -67,7 +67,7 @@ export const checkoutSchema: ZodType<FormData> = z
         },
         { message: 'O cartão está expirado.' }
       ),
-    //   installments: z.coerce.number().min(1),
+    installments: z.coerce.number().min(1),
   })
   .superRefine((values, ctx) => {
     const { documentType, documentNumber } = values;
@@ -106,16 +106,17 @@ export type FormData = {
   cardHolder: string;
   cvv: string;
   expirationDate: string;
-  //   installments: number;
+  installments: number;
 };
 
 export type FormFieldProps = {
   type: string;
-  placeholder: string;
+  placeholder?: string;
   name: ValidFieldNames;
   register: UseFormRegister<FormData>;
   error: FieldError | undefined;
-  //   valueAsNumber?: boolean;
+  className?: string;
+  options?: { label: string; value: string | number }[]; // Para o select ou radio
 };
 
 export type ValidFieldNames =
@@ -132,5 +133,5 @@ export type ValidFieldNames =
   | 'cardNumber'
   | 'cardHolder'
   | 'cvv'
-  | 'expirationDate';
-//   | 'installments';
+  | 'expirationDate'
+  | 'installments';

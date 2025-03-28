@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
 import { FormData, FormSchema, checkoutSchema } from '@/utils/validations/form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import FormField from '@/components/formField';
 import { zodResolver } from '@hookform/resolvers/zod';
+import CheckoutCart from '@/components/checkout/checkoutListItems';
+import { useCheckout } from '@/components/checkout/checkoutContext';
 
 export default function Checkout() {
-  const [step, setStep] = useState(1);
+  const { step, setStep, handleNext } = useCheckout();
+
   const {
     register,
     handleSubmit,
@@ -15,10 +17,15 @@ export default function Checkout() {
     watch,
   } = useForm<FormData>({
     resolver: zodResolver(checkoutSchema), // integração com o zod
+    mode: 'onBlur',
+    defaultValues: {
+      documentType: 'cpf',
+      installments: 1,
+    },
   });
 
   const formData = watch();
-  const documentType = watch('documentType'); // Pega o tipo selecionado pelo usuário
+  const documentType = watch('documentType');
 
   const isStepComplete = (currentStep: number) => {
     switch (currentStep) {
@@ -41,11 +48,6 @@ export default function Checkout() {
       default:
         return false;
     }
-  };
-
-  // Avança para a próxima etapa
-  const handleNext = () => {
-    setStep(step + 1);
   };
 
   // Envia os dados para a API mock
@@ -80,7 +82,7 @@ export default function Checkout() {
             holderName: formData.cardHolder,
             cvv: formData.cvv,
             expirationDate: formData.expirationDate,
-            // installments: formData.installments,
+            installments: formData.installments,
           },
         },
       }),
@@ -90,23 +92,32 @@ export default function Checkout() {
     console.log('Transação enviada:', result);
   };
 
+  const documentTypeOptions = [
+    { value: 'cpf', label: 'CPF' },
+    { value: 'cnpj', label: 'CNPJ' },
+  ];
+
+  const installmentsOptions = [
+    { value: 1, label: '1x' },
+    { value: 2, label: '2x' },
+    { value: 3, label: '3x' },
+  ];
+
   return (
-    <div className='flex justify-center flex-col px-20 py-5'>
+    <div className='flex justify-center flex-col px-50 py-10'>
       <h1 className='text-center font-bold text-2xl'>Checkout</h1>
 
-      <div className='grid grid-cols-3 pt-3'>
-        <div className='col-span-2 pr-3'>
+      <div className='grid grid-cols-4 pt-15'>
+        <div className='col-span-3 pr-15'>
           <form onSubmit={handleSubmit(onSubmitForm)}>
             {/* Identificação */}
-            <div
-              className={`py-3 ${step === 1 ? 'opacity-100' : 'opacity-40'}`}
-            >
+            <div className={`${step === 1 ? 'opacity-100' : 'opacity-40'}`}>
               <button className='font-semibold' onClick={() => setStep(1)}>
                 Identificação
               </button>
               {step === 1 && (
                 <div className='mt-2 space-y-2'>
-                  <div className='flex'>
+                  <div className='grid grid-cols-2 gap-5'>
                     <FormField
                       type='text'
                       placeholder='Nome'
@@ -128,26 +139,13 @@ export default function Checkout() {
                     <label htmlFor='documentType' className='block font-medium'>
                       Documento:
                     </label>
-                    <div className='flex items-center gap-4 mt-1'>
-                      <label className='flex items-center'>
-                        <input
-                          type='radio'
-                          value='cpf'
-                          {...register('documentType')}
-                          className='mr-1'
-                        />
-                        CPF
-                      </label>
-                      <label className='flex items-center'>
-                        <input
-                          type='radio'
-                          value='cnpj'
-                          {...register('documentType')}
-                          className='mr-1'
-                        />
-                        CNPJ
-                      </label>
-                    </div>
+                    <FormField
+                      type='radio'
+                      name='documentType'
+                      register={register}
+                      error={errors.documentType}
+                      options={documentTypeOptions}
+                    />
 
                     <FormField
                       type='text'
@@ -163,7 +161,7 @@ export default function Checkout() {
                     <button
                       onClick={handleNext}
                       disabled={!isStepComplete(1)}
-                      className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
+                      className='bg-blue-500 text-white p-2 mt-2 rounded cursor-pointer disabled:opacity-50'
                     >
                       Salvar e Continuar
                     </button>
@@ -182,65 +180,72 @@ export default function Checkout() {
               </button>
               {step === 2 && (
                 <div className='mt-2 space-y-2'>
-                  <FormField
-                    type='text'
-                    placeholder='Rua'
-                    name='street'
-                    register={register}
-                    error={errors.street}
-                  />
+                  <div className='grid grid-cols-5 gap-2'>
+                    <FormField
+                      type='text'
+                      placeholder='Rua'
+                      name='street'
+                      register={register}
+                      error={errors.street}
+                      className='col-span-4'
+                    />
+                    <FormField
+                      type='text'
+                      placeholder='Número'
+                      name='number'
+                      register={register}
+                      error={errors.number}
+                      className='col-span-1'
+                    />
+                  </div>
 
-                  <FormField
-                    type='text'
-                    placeholder='Número'
-                    name='number'
-                    register={register}
-                    error={errors.number}
-                  />
+                  <div className='grid grid-cols-5 gap-2'>
+                    <FormField
+                      type='text'
+                      placeholder='Bairro'
+                      name='neighborhood'
+                      register={register}
+                      error={errors.neighborhood}
+                      className='col-span-2'
+                    />
+                    <FormField
+                      type='text'
+                      placeholder='Cidade'
+                      name='city'
+                      register={register}
+                      error={errors.city}
+                      className='col-span-1'
+                    />
+                    <FormField
+                      type='text'
+                      placeholder='Estado'
+                      name='state'
+                      register={register}
+                      error={errors.state}
+                      className='col-span-1'
+                    />
+                    <FormField
+                      type='text'
+                      placeholder='País'
+                      name='country'
+                      register={register}
+                      error={errors.country}
+                      className='col-span-1'
+                    />
+                  </div>
 
-                  <FormField
-                    type='text'
-                    placeholder='Bairro'
-                    name='neighborhood'
-                    register={register}
-                    error={errors.neighborhood}
-                  />
-
-                  <FormField
-                    type='text'
-                    placeholder='Cidade'
-                    name='city'
-                    register={register}
-                    error={errors.city}
-                  />
-
-                  <FormField
-                    type='text'
-                    placeholder='País'
-                    name='country'
-                    register={register}
-                    error={errors.country}
-                  />
-
-                  <FormField
-                    type='text'
-                    placeholder='Estado'
-                    name='state'
-                    register={register}
-                    error={errors.state}
-                  />
-
-                  <button
-                    onClick={handleNext}
-                    disabled={!isStepComplete(2)}
-                    className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
-                  >
-                    Salvar e Continuar
-                  </button>
+                  <div className='flex justify-end mt-5 mb-2'>
+                    <button
+                      onClick={handleNext}
+                      disabled={!isStepComplete(2)}
+                      className='bg-blue-500 text-white p-2 mt-2 rounded cursor-pointer disabled:opacity-50'
+                    >
+                      Salvar e Continuar
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
-
             <hr className='opacity-40' />
 
             {/* Pagamentos */}
@@ -252,49 +257,58 @@ export default function Checkout() {
               </button>
               {step === 3 && (
                 <div className='mt-2 space-y-2'>
-                  <FormField
-                    type='text'
-                    placeholder='Número do cartão'
-                    name='cardNumber'
-                    register={register}
-                    mask='creditCard'
-                    error={errors.cardNumber}
-                  />
+                  <div className='grid grid-cols-2'>
+                    <FormField
+                      type='text'
+                      placeholder='Número do Cartão'
+                      name='cardNumber'
+                      register={register}
+                      mask='creditCard'
+                      error={errors.cardNumber}
+                    />
 
-                  <FormField
-                    type='text'
-                    placeholder='Nome do Cartão'
-                    name='cardHolder'
-                    register={register}
-                    error={errors.cardHolder}
-                  />
+                    <FormField
+                      type='text'
+                      placeholder='Nome do Cartão'
+                      name='cardHolder'
+                      register={register}
+                      error={errors.cardHolder}
+                    />
 
-                  <FormField
-                    type='text'
-                    placeholder='CVV'
-                    name='cvv'
-                    register={register}
-                    error={errors.cvv}
-                  />
+                    <FormField
+                      type='text'
+                      placeholder='CVV'
+                      name='cvv'
+                      register={register}
+                      error={errors.cvv}
+                    />
 
-                  <FormField
-                    type='text'
-                    placeholder='MM/YYYY'
-                    name='expirationDate'
-                    register={register}
-                    mask='expirationDate'
-                    error={errors.expirationDate}
-                  />
+                    <FormField
+                      type='text'
+                      placeholder='MM/YYYY'
+                      name='expirationDate'
+                      register={register}
+                      mask='expirationDate'
+                      error={errors.expirationDate}
+                    />
 
-                  {/* Falta um select para o intallments */}
-
-                  <button
-                    onClick={handleNext}
-                    disabled={!isStepComplete(3)}
-                    className='bg-blue-500 text-white p-2 mt-2 rounded disabled:opacity-50'
-                  >
-                    Salvar e Continuar
-                  </button>
+                    <FormField
+                      type='select'
+                      name='installments'
+                      register={register}
+                      error={errors.installments}
+                      options={installmentsOptions}
+                    />
+                  </div>
+                  <div className='flex justify-end mt-5 mb-2'>
+                    <button
+                      onClick={handleNext}
+                      disabled={!isStepComplete(3)}
+                      className='bg-blue-500 text-white p-2 mt-2 rounded cursor-pointer disabled:opacity-50'
+                    >
+                      Salvar e Continuar
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -316,7 +330,7 @@ export default function Checkout() {
                   </pre>
                   <button
                     type='submit'
-                    className='bg-green-500 text-white p-2 mt-2 rounded'
+                    className='bg-green-500 text-white p-2 mt-2 cursor-pointer rounded'
                   >
                     Confirmar Pedido
                   </button>
@@ -325,10 +339,7 @@ export default function Checkout() {
             </div>
           </form>
         </div>
-
-        <div>
-          <h2 className='font-bold'>Na sua sacola</h2>
-        </div>
+        <CheckoutCart />
       </div>
     </div>
   );
