@@ -1,6 +1,5 @@
+import { transactions } from '@/mocks/transactions';
 import { NextResponse } from 'next/server';
-
-const transactions: any[] = [];
 
 export async function GET() {
   return NextResponse.json(transactions);
