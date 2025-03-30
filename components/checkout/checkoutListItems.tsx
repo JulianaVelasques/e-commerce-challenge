@@ -5,24 +5,24 @@ export default function CheckoutCart() {
 
   return (
     <div>
-      <h2 className='font-bold'>Na sua sacola</h2>
+      <h2 className='text-xl font-bold text-gray-900 mb-3'>Pedido</h2>
 
-      <div className='flex justify-between opacity-60'>
+      <div className='flex justify-between text-gray-500'>
         <p>Subtotal</p>
         <p>R$ {subtotal.toFixed(2)}</p>
       </div>
 
-      <div className='flex justify-between opacity-60'>
+      <div className='flex justify-between text-gray-500'>
         <p>Frete</p>
         <p>R$ {shipping.toFixed(2)}</p>
       </div>
 
-      <div className='flex justify-between mt-4 font-medium mb-5'>
+      <div className='font-bold text-gray-900 flex justify-between my-3'>
         <p>Total</p>
         <p>R$ {total.toFixed(2)}</p>
       </div>
 
-      <hr className='opacity-40' />
+      <hr className='opacity-30' />
 
       <div className='mt-4'>
         <p className='text-amber-700 font-bold text-sm'>
@@ -32,7 +32,7 @@ export default function CheckoutCart() {
         {products.map((product) => (
           <div key={product.name} className='flex items-center gap-5 mt-3'>
             <svg
-              className='w-10 h-10 text-gray-200 dark:text-gray-600'
+              className='w-10 h-10 text-gray-600'
               aria-hidden='true'
               xmlns='http://www.w3.org/2000/svg'
               fill='currentColor'

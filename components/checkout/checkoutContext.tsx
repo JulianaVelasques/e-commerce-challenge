@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useState } from 'react';
 
 interface CheckoutContextProps {
@@ -6,8 +8,10 @@ interface CheckoutContextProps {
   subtotal: number;
   total: number;
   step: number;
-  setStep: (step: number) => void;
+  lastCompletedStep: number;
   handleNext: () => void;
+  handleEdit: (step: number) => void;
+  setStep: (step: number) => void;
 }
 
 interface Product {
@@ -34,8 +38,21 @@ const CheckoutContext = createContext<CheckoutContextProps | undefined>(
 );
 
 export function CheckoutProvider({ children }: { children: React.ReactNode }) {
-  const [step, setStep] = useState(1);
-  const handleNext = () => setStep((prev) => prev + 1);
+  const [step, setStep] = useState(0);
+  const [lastCompletedStep, setLastCompletedStep] = useState(0);
+
+  const handleNext = () => {
+    if (step === lastCompletedStep + 1) {
+      setLastCompletedStep(step); // Marca este step como concluído
+    }
+    setStep(step + 1);
+  };
+
+  const handleEdit = (targetStep: number) => {
+    if (targetStep <= lastCompletedStep) {
+      setStep(targetStep);
+    }
+  };
 
   const subtotal = products.reduce(
     (acc, product) => acc + product.quantity * product.amount,
@@ -46,7 +63,17 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <CheckoutContext.Provider
-      value={{ products, subtotal, shipping, total, step, setStep, handleNext }}
+      value={{
+        products,
+        subtotal,
+        shipping,
+        total,
+        step,
+        lastCompletedStep,
+        handleNext,
+        handleEdit,
+        setStep,
+      }}
     >
       {children}
     </CheckoutContext.Provider>
