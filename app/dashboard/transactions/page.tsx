@@ -35,7 +35,7 @@ export default function TransactionsPage() {
   );
 
   return (
-    <div className='p-1'>
+    <div className='px-10 py-8 overflow-hidden shadow rounded-3xl bg-white'>
       <h1 className='text-2xl font-bold mb-4'>Listagem de Transações</h1>
       {loading ? (
         <p>Carregando...</p>

@@ -12,7 +12,9 @@ export default function AdminLayout({
       <div className='w-full flex-none md:w-64'>
         <SideBar />
       </div>
-      <div className='flex-grow p-2 md:overflow-y-auto md:p-12'>{children}</div>
+      <div className='flex-grow p-5 bg-gray-50 md:overflow-y-auto'>
+        {children}
+      </div>
     </div>
   );
 }
