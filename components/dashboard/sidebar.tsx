@@ -3,12 +3,12 @@ import NavLinks from './navLink';
 
 const SideBar = () => {
   return (
-    <div className='flex h-full flex-col px-3 py-4 border-gray-200 shadow-2xl border-r-1 md:px-2'>
+    <div className='flex h-full flex-col px-3 py-4 border-gray-200 text-white shadow-2xl border-r-1 bg-gray-950 md:px-2'>
       <Link
         className='flex h-10 mb-2 items-center justify-center rounded-md bg-teal-400 p-4 md:h-20'
-        href='/'
+        href='/transactions'
       >
-        <p className='bg-pink-400 text-center text-white font-bold md:w-40 rounded p-2'>
+        <p className='bg-pink-400 text-center font-bold md:w-40 rounded p-2'>
           CompanyLogo
         </p>
       </Link>

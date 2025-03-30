@@ -1,6 +1,6 @@
 export const transactions = [
   {
-    id: '123',
+    id: '1234',
     status: 'authorized',
     amount: 1500,
     customer: {
@@ -61,7 +61,7 @@ export const transactions = [
     },
   },
   {
-    id: '456',
+    id: '4567',
     status: 'authorized',
     amount: 150,
     customer: {
@@ -78,6 +78,250 @@ export const transactions = [
       },
     },
     items: [{ name: 'Produto D', quantity: 1, amount: 150 }],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '1334',
+    status: 'authorized',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [{ name: 'Produto D', quantity: 1, amount: 150 }],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '2342',
+    status: 'failed',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [
+      { name: 'Produto D', quantity: 1, amount: 150 },
+      { name: 'Produto B', quantity: 1, amount: 150 },
+      { name: 'Produto C', quantity: 1, amount: 150 },
+    ],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '8901',
+    status: 'authorized',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [{ name: 'Produto D', quantity: 1, amount: 150 }],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '9026',
+    status: 'failed',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [{ name: 'Produto D', quantity: 1, amount: 150 }],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '5656',
+    status: 'authorized',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [
+      { name: 'Produto D', quantity: 1, amount: 150 },
+      { name: 'Produto B', quantity: 1, amount: 150 },
+      { name: 'Produto C', quantity: 1, amount: 150 },
+    ],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '812',
+    status: 'authorized',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [{ name: 'Produto D', quantity: 1, amount: 150 }],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '9018',
+    status: 'authorized',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [{ name: 'Produto D', quantity: 1, amount: 150 }],
+    paymentMethod: {
+      type: 'card',
+      card: {
+        firstDigits: '1234',
+        lastDigits: '5678',
+        holderName: 'Fernando Santos',
+        expirationDate: '12/2028',
+        installments: 1,
+      },
+    },
+  },
+  {
+    id: '5346',
+    status: 'authorized',
+    amount: 150,
+    customer: {
+      firstName: 'Fernando',
+      lastName: 'Santos',
+      document: { type: 'cpf', number: '123.456.789-00' },
+      address: {
+        city: 'Curitiba',
+        street: 'Rua das Flores',
+        number: '123',
+        country: 'Brasil',
+        state: 'PR',
+        neighborhood: 'Centro',
+      },
+    },
+    items: [
+      { name: 'Produto D', quantity: 1, amount: 150 },
+      { name: 'Produto B', quantity: 1, amount: 150 },
+      { name: 'Produto C', quantity: 1, amount: 150 },
+    ],
     paymentMethod: {
       type: 'card',
       card: {

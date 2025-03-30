@@ -35,8 +35,11 @@ export default function TransactionsPage() {
   );
 
   return (
-    <div className='px-10 py-8 overflow-hidden shadow rounded-3xl bg-white'>
-      <h1 className='text-2xl font-bold mb-4'>Listagem de Transações</h1>
+    <div className='px-10 py-8 overflow-hidden shadow rounded-3xl bg-white relative'>
+      <h1 className='text-2xl font-bold mb-1'>Lista de Transações</h1>
+      <p className='text-sm text-gray-500'>
+        Aqui você encontra todas as transações ocorridas.
+      </p>
       {loading ? (
         <p>Carregando...</p>
       ) : (
