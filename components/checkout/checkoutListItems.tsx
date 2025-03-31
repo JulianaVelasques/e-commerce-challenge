@@ -13,6 +13,7 @@ export default function CheckoutCart() {
       {/* Só exibe o botão de resumo no mobile */}
       <div className='md:hidden'>
         <button
+          aria-label='Expandir para visualizar o resumo dos pedidos'
           className='flex items-center justify-between w-full px-2 py-2'
           onClick={() => setIsExpanded(!isExpanded)}
         >

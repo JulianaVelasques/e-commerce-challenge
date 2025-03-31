@@ -12,6 +12,7 @@ export default function NextStepButton({
   return (
     <div className='flex justify-end mt-5 mb-2'>
       <button
+        aria-label='Salvar e continuar'
         onClick={onClick}
         disabled={disabled}
         className={`bg-pink-400 text-white p-2 mt-2 rounded cursor-pointer text-xs md:text-sm ${

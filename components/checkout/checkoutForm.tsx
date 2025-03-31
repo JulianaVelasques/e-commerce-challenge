@@ -248,7 +248,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
 
           <FormField
             type='text'
-            placeholder='CVV'
+            placeholder='Código de segurança'
             name='cvv'
             register={register}
             error={errors.cvv}
@@ -309,6 +309,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
 
         <div className='flex justify-end mt-5 mb-2'>
           <button
+            aria-label='Finalizar compra'
             type='submit'
             disabled={loading}
             className='bg-teal-400 text-white p-2 rounded cursor-pointer'

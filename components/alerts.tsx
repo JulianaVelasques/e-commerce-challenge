@@ -35,6 +35,7 @@ export default function Alert({ type, title, message, onClose }: AlertProps) {
     >
       {onClose && (
         <button
+          aria-label='Fechar alerta'
           className='absolute top-2 right-2 text-gray-500 hover:text-gray-700'
           onClick={onClose}
         >

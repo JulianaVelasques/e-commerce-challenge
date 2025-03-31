@@ -77,7 +77,10 @@ export default function TransactionsTable({
               <td className='px-4 py-2 text-left'>Cartão de crédito</td>
               <td className='px-4 py-2 text-left'>
                 <Link href={`/dashboard/transactions/${transaction.id}`}>
-                  <button className='bg-white border text-gray-700 border-gray-300 rounded-full p-2 shadow-sm text-[10px] font-bold cursor-pointer hover:bg-gray-100'>
+                  <button
+                    aria-label='Visualizar detalhes da transação'
+                    className='bg-white border text-gray-700 border-gray-300 rounded-full p-2 shadow-sm text-[10px] font-bold cursor-pointer hover:bg-gray-100'
+                  >
                     Visualizar
                   </button>
                 </Link>

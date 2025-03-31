@@ -25,6 +25,7 @@ export default function StepSection({
         <p className='font-semibold'>{title}</p>
         {canEdit && !isActive && (
           <button
+            aria-label='Editar step'
             className='text-teal-400 underline text-sm cursor-pointer'
             onClick={onEdit}
           >
