@@ -1,21 +1,40 @@
+'use client';
+
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className='grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]'>
-      <main className='flex flex-col gap-[32px] row-start-2 items-center sm:items-start'>
-        <h1>Bem vindo ao ínicio do teste!</h1>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8 sm:p-20 text-center'>
+      <main className='bg-white shadow-lg rounded-xl p-8 sm:p-12 max-w-md w-full'>
+        <h1 className='text-lg font-bold text-gray-800 mb-4 md:text-2xl'>
+          Bem-vindo à resolução do desafio!
+        </h1>
+        <p className='text-gray-600 mb-6 text-sm md:text-base'>
+          Qual página quer ver primeiro?
+        </p>
 
-        <div>O que gostaria ver? Adm transactions ou Checkout page?</div>
+        <div className='flex flex-col gap-4'>
+          <Link
+            href='/dashboard/transactions'
+            className='w-full px-4 py-2 bg-teal-400 text-white rounded-lg hover:bg-gray-900 transition text-sm md:text-base'
+          >
+            Acessar Transactions
+          </Link>
 
-        <Link href='/checkout'>
-          <button className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition'>
+          <Link
+            href='/checkout'
+            className='w-full px-4 py-2 bg-pink-400 text-white rounded-lg hover:bg-gray-900 transition text-sm md:text-base'
+          >
             Ir para o Checkout
-          </button>
-        </Link>
+          </Link>
+        </div>
       </main>
-      <footer className='row-start-3 flex gap-[24px] flex-wrap items-center justify-center'>
-        <p>Made by: Juliana Velasques Balta dos Santos</p>
+
+      <footer className='mt-12 text-gray-500 text-sm'>
+        Made by:{' '}
+        <span className='font-semibold'>
+          Juliana Velasques Balta dos Santos
+        </span>
       </footer>
     </div>
   );
