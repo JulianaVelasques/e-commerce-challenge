@@ -1,3 +1,5 @@
+'use client';
+
 interface StepSectionProps {
   title: string;
   isActive: boolean;
@@ -14,12 +16,16 @@ export default function StepSection({
   children,
 }: StepSectionProps) {
   return (
-    <div className={`py-3 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
-      <div className='flex justify-between px-2 '>
+    <div
+      className={`py-3 ${
+        isActive ? 'text-gray-900' : 'text-gray-400'
+      } border-b border-teal-400 last:border-b-0`}
+    >
+      <div className='flex justify-between'>
         <p className='font-semibold'>{title}</p>
         {canEdit && !isActive && (
           <button
-            className='text-blue-800 underline text-sm cursor-pointer'
+            className='text-teal-400 underline text-sm cursor-pointer'
             onClick={onEdit}
           >
             Editar

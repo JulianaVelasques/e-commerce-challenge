@@ -1,3 +1,5 @@
+'use client';
+
 export default function TransactionStatus({ status }: { status: string }) {
   return (
     <span
