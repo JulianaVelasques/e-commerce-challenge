@@ -5,7 +5,7 @@ import { SubmitHandler } from 'react-hook-form';
 import CheckoutCart from '@/components/checkout/checkoutListItems';
 import CheckoutForm from '@/components/checkout/checkoutForm';
 import { useState } from 'react';
-import Alert from '@/components/alerts';
+import Alert from '@/components/ui/alerts';
 
 export default function Checkout() {
   const [loading, setLoading] = useState(false);

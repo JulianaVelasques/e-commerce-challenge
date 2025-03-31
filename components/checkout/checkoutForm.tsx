@@ -6,7 +6,7 @@ import FormField from '@/components/checkout/formField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormData, checkoutSchema } from '@/utils/validations/form';
 import StepSection from './step';
-import InfoSection from '../infoSection';
+import InfoSection from '../ui/infoSection';
 import NextStepButton from './nextButton';
 
 interface CheckoutFormProps {

@@ -3,7 +3,7 @@
 import TransactionsTable, {
   TransactionTableRow,
 } from '@/components/dashboard/transactionTable';
-import Loading from '@/components/loading';
+import Loading from '@/components/ui/loading';
 import { Transaction } from '@/types/transaction';
 import { useEffect, useState } from 'react';
 

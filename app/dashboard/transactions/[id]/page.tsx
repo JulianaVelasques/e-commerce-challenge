@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Transaction } from '@/types/transaction';
-import Table from '@/components/table';
-import InfoSection from '@/components/infoSection';
-import Loading from '@/components/loading';
+import Table from '@/components/ui/table';
+import InfoSection from '@/components/ui/infoSection';
+import Loading from '@/components/ui/loading';
 
 export default function TransactionDetailsPage() {
   const { id } = useParams();
