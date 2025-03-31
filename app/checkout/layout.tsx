@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckoutProvider } from '@/components/checkout/checkoutContext';
+import { CheckoutProvider } from '@/contexts/checkout/checkoutContext';
 
 export default function CheckoutLayout({
   children,

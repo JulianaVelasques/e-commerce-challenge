@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useCheckout } from '@/components/checkout/checkoutContext';
+import { useCheckout } from '@/contexts/checkout/checkoutContext';
 import ChevronIcon from '../icons/chevron';
 
 export default function CheckoutCart() {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { useCheckout } from '@/components/checkout/checkoutContext';
+import { useCheckout } from '@/contexts/checkout/checkoutContext';
 import FormField from '@/components/checkout/formField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormData, checkoutSchema } from '@/utils/validations/form';
