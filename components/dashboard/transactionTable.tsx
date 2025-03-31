@@ -42,7 +42,10 @@ export default function TransactionsTable({
           placeholder='Buscar ID...'
           className='p-2 border border-gray-300 rounded-lg shadow-sm'
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
         />
       </div>
 
