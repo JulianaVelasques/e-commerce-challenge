@@ -1,9 +1,13 @@
+'use client';
+
 import { useForm } from 'react-hook-form';
 import { useCheckout } from '@/components/checkout/checkoutContext';
 import FormField from '@/components/checkout/formField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormData, checkoutSchema } from '@/utils/validations/form';
 import StepSection from './step';
+import InfoSection from '../infoSection';
+import NextStepButton from './nextButton';
 
 interface CheckoutFormProps {
   onSubmit: (data: FormData) => void;
@@ -108,7 +112,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
         canEdit={lastCompletedStep >= 0}
         onEdit={() => handleEdit(0)}
       >
-        <div className='grid grid-cols-2 gap-2'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-3'>
           <FormField
             type='text'
             placeholder='Nome'
@@ -125,31 +129,33 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
           />
         </div>
 
-        <div>
-          <label htmlFor='documentType' className='block font-medium mt-3'>
-            Documento:
-          </label>
-          <FormField
-            type='radio'
-            name='documentType'
-            register={register}
-            error={errors.documentType}
-            options={documentTypeOptions}
-          />
+        <label
+          htmlFor='documentType'
+          className='block font-medium mt-0.5 text-xs md:text-sm'
+        >
+          Documento:
+        </label>
+        <FormField
+          type='radio'
+          name='documentType'
+          register={register}
+          error={errors.documentType}
+          options={documentTypeOptions}
+        />
 
-          <FormField
-            type='text'
-            placeholder={documentType === 'cnpj' ? 'CNPJ' : 'CPF'}
-            name='documentNumber'
-            register={register}
-            error={errors.documentNumber}
-            mask={documentType === 'cnpj' ? 'cnpj' : 'cpf'}
-          />
-        </div>
+        <FormField
+          type='text'
+          placeholder={documentType === 'cnpj' ? 'CNPJ' : 'CPF'}
+          name='documentNumber'
+          register={register}
+          error={errors.documentNumber}
+          mask={documentType === 'cnpj' ? 'cnpj' : 'cpf'}
+          className='mt-[-0.5rem]'
+        />
 
         <NextStepButton onClick={handleNext} disabled={!isStepComplete(0)} />
       </StepSection>
-      <hr className='opacity-40' />
+
       {/* Passo 2 - Endereço */}
       <StepSection
         title='Endereço'
@@ -157,7 +163,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
         canEdit={lastCompletedStep >= 1}
         onEdit={() => handleEdit(1)}
       >
-        <div className='grid grid-cols-5 gap-2'>
+        <div className='grid grid-cols-1 md:grid-cols-5 gap-2'>
           <FormField
             type='text'
             placeholder='Rua'
@@ -176,14 +182,14 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
           />
         </div>
 
-        <div className='grid grid-cols-5 gap-2'>
+        <div className='grid grid-cols-1 md:grid-cols-5 gap-2'>
           <FormField
             type='text'
             placeholder='Bairro'
             name='neighborhood'
             register={register}
             error={errors.neighborhood}
-            className='col-span-2'
+            className='md:col-span-2'
           />
           <FormField
             type='text'
@@ -191,7 +197,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
             name='city'
             register={register}
             error={errors.city}
-            className='col-span-1'
+            className='md:col-span-1'
           />
           <FormField
             type='text'
@@ -199,7 +205,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
             name='state'
             register={register}
             error={errors.state}
-            className='col-span-1'
+            className='md:col-span-1'
           />
           <FormField
             type='text'
@@ -207,12 +213,12 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
             name='country'
             register={register}
             error={errors.country}
-            className='col-span-1'
+            className='md:col-span-1'
           />
         </div>
         <NextStepButton onClick={handleNext} disabled={!isStepComplete(1)} />
       </StepSection>
-      <hr className='opacity-40' />
+
       {/* Passo 3 - Pagamento */}
       <StepSection
         title='Pagamento'
@@ -220,7 +226,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
         canEdit={lastCompletedStep >= 2}
         onEdit={() => handleEdit(2)}
       >
-        <div className='grid grid-cols-2 gap-2'>
+        <div className='grid grid-cols-2 md:grid-cols-4 gap-2'>
           <FormField
             type='text'
             placeholder='Número do Cartão'
@@ -228,6 +234,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
             register={register}
             mask='creditCard'
             error={errors.cardNumber}
+            className='col-span-2'
           />
 
           <FormField
@@ -236,6 +243,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
             name='cardHolder'
             register={register}
             error={errors.cardHolder}
+            className='col-span-2'
           />
 
           <FormField
@@ -261,71 +269,54 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
             register={register}
             error={errors.installments}
             options={installmentsOptions}
+            className='col-span-2'
           />
         </div>
         <NextStepButton onClick={handleNext} disabled={!isStepComplete(2)} />
       </StepSection>
 
-      <hr className='opacity-40' />
-
       {/* Revisão */}
       <StepSection title='Revisão' isActive={step === 3}>
-        <div className='mx-8 pt-5 px-5 text-[0.8rem]'>
-          <p className='font-bold uppercase'>Identificação</p>
-          <hr className='opacity-20' />
-          <p>
-            Nome completo: {formData.firstName} {formData.lastName}
-          </p>
-          <p>
-            Documento:{' '}
-            <span className='uppercase'>{formData.documentType}</span> -{' '}
-            {formData.documentNumber}
-          </p>
-
-          <p className='font-bold uppercase mt-2'>Endereço de entrega</p>
-          <hr className='opacity-20' />
-          <p>
-            {formData.street}, {formData.number} - {formData.neighborhood} -{' '}
-            {formData.city}/{formData.country}
-          </p>
-
-          <p className='font-bold uppercase mt-2'>Informações deagamento</p>
-          <hr className='opacity-20' />
-          <p>
-            Cartão de crédito: {formData.cardNumber} - {formData.cardHolder}
-          </p>
-          <p>{formData.installments}x sem juros </p>
+        <div className='mx-2 pt-5 text-[0.8rem]'>
+          <InfoSection
+            title='Confira suas informações'
+            data={[
+              {
+                label: 'Nome completo',
+                value: `${formData.firstName} ${formData.lastName}`,
+              },
+              {
+                label: 'Documento',
+                value: `${formData.documentType.toUpperCase()} - ${
+                  formData.documentNumber
+                }`,
+              },
+              {
+                label: 'Endereço',
+                value: `${formData.street}, ${formData.number}, ${formData.neighborhood}, ${formData.city} - ${formData.state}, ${formData.country}`,
+              },
+              {
+                label: 'Cartão de crédito',
+                value: `${formData.cardNumber} - ${formData.cardHolder}`,
+              },
+              {
+                label: 'Parcelamento',
+                value: `${formData.installments}x sem juros`,
+              },
+            ]}
+          />
         </div>
 
         <div className='flex justify-end mt-5 mb-2'>
           <button
             type='submit'
             disabled={loading}
-            className='bg-green-500 text-white p-2 rounded'
+            className='bg-teal-400 text-white p-2 rounded cursor-pointer'
           >
             {loading ? 'Processando...' : 'Finalizar Compra'}
           </button>
         </div>
       </StepSection>
     </form>
-  );
-}
-
-interface NextStepButtonProps {
-  onClick: () => void;
-  disabled: boolean;
-}
-
-function NextStepButton({ onClick, disabled }: NextStepButtonProps) {
-  return (
-    <div className='flex justify-end mt-5 mb-2'>
-      <button
-        onClick={onClick}
-        disabled={disabled}
-        className='bg-blue-500 text-white p-2 mt-2 rounded cursor-pointer disabled:opacity-50'
-      >
-        Salvar e Continuar
-      </button>
-    </div>
   );
 }

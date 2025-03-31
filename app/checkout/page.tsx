@@ -11,6 +11,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(true);
 
   // Envia os dados para a API mock
   const handleCheckoutSubmit: SubmitHandler<FormSchema> = async (
@@ -67,7 +68,7 @@ export default function Checkout() {
         setSuccessMessage('Pedido confirmado com sucesso!');
       }
 
-      console.log('Resposta da API:', result);
+      setShowAlert(true);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -80,27 +81,27 @@ export default function Checkout() {
   };
 
   return (
-    <div className='flex justify-center flex-col px-50 py-10'>
-      <h1 className='text-center font-bold text-3xl text-gray-900 sm:text-2xl'>
+    <div className='flex justify-center flex-col px-5 py-5 lg:px-40 md:py-10'>
+      <h1 className='text-center font-bold md:text-3xl text-gray-900 text-2xl'>
         Checkout
       </h1>
 
-      <div className='grid grid-cols-4 pt-15'>
-        <div className='col-span-3 mr-15 shadow-xl p-5 rounded-xl'>
+      <div className='grid grid-cols-1 pt-10 md:grid-cols-4 lg:pt-15'>
+        <div className='shadow-xl p-5 rounded-xl col-span-1 mr-0 order-2 md:order-0 md:col-span-3 md:mr-10 lg:mr-15'>
           <CheckoutForm onSubmit={handleCheckoutSubmit} loading={loading} />
         </div>
 
         <CheckoutCart />
       </div>
 
-      {/* Alerta no canto inferior direito */}
-      {(error || successMessage) && (
-        <div className='fixed bottom-5 right-5 w-96 z-50'>
+      {showAlert && (error || successMessage) && (
+        <div className='fixed top-5 right-5 w-72 md:w-96 z-50'>
           {error && (
             <Alert
               type='danger'
               title='Ish, ocorreu um problema!'
               message={error}
+              onClose={() => setShowAlert(false)}
             />
           )}
           {successMessage && (
@@ -108,6 +109,7 @@ export default function Checkout() {
               type='success'
               title='Deu tudo certo!'
               message={successMessage}
+              onClose={() => setShowAlert(false)}
             />
           )}
         </div>
