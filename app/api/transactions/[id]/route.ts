@@ -5,7 +5,9 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const transaction = transactions.find((t) => t.id === params.id);
+  const { id } = await params;
+
+  const transaction = transactions.find((t) => t.id === id);
 
   if (!transaction) {
     return NextResponse.json(
